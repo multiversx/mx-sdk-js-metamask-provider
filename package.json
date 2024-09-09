@@ -22,7 +22,7 @@
     "@metamask/providers": "16.0.0"
   },
   "devDependencies": {
-    "@multiversx/sdk-core": ">= 13.1.0",
+    "@multiversx/sdk-core": ">= 13.0.0",
     "esmify": "2.1.1",
     "typescript": "5.0.4",
     "@types/node": "18.19.0",
@@ -42,6 +42,6 @@
     "ts-jest": "29.1.1"
   },
   "peerDependencies": {
-    "@multiversx/sdk-core": ">= 13.1.0"
+    "@multiversx/sdk-core": ">= 13.0.0"
   }
 }
