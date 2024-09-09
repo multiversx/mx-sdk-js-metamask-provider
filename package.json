@@ -1,6 +1,6 @@
 {
   "name": "@multiversx/sdk-metamask-provider",
-  "version": "0.0.4",
+  "version": "0.0.5",
   "description": "Signing provider for dApps: Metamask Snap",
   "license": "GPL-3.0-or-later",
   "author": "MultiversX",
@@ -19,10 +19,10 @@
     "pretest": "npm run build"
   },
   "dependencies": {
-    "@metamask/providers": "16.0.0",
-    "@multiversx/sdk-core": "12.18.0"
+    "@metamask/providers": "16.0.0"
   },
   "devDependencies": {
+    "@multiversx/sdk-core": ">= 13.0.0",
     "esmify": "2.1.1",
     "typescript": "5.0.4",
     "@types/node": "18.19.0",
@@ -42,6 +42,6 @@
     "ts-jest": "29.1.1"
   },
   "peerDependencies": {
-    "@multiversx/sdk-core": ">= 12.1.0"
+    "@multiversx/sdk-core": ">= 13.0.0"
   }
 }

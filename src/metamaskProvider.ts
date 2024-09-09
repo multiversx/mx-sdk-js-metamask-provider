@@ -33,7 +33,9 @@ export class MetamaskProvider {
   private static _instance: MetamaskProvider = new MetamaskProvider();
 
   public static isMetamaskInstalled(): boolean {
-    return safeWindow && safeWindow.ethereum && safeWindow.ethereum.isMetaMask;
+    return Boolean(
+      safeWindow && safeWindow.ethereum && safeWindow.ethereum.isMetaMask
+    );
   }
 
   private constructor() {
@@ -81,7 +83,7 @@ export class MetamaskProvider {
       );
     }
     try {
-      const address = (await safeWindow.ethereum.request({
+      const address = (await safeWindow?.ethereum?.request({
         method: 'wallet_invokeSnap',
         params: {
           snapId: defaultSnapOrigin,
@@ -95,7 +97,7 @@ export class MetamaskProvider {
       this.account.address = address;
 
       if (token) {
-        const tokenSigned = (await safeWindow.ethereum.request({
+        const tokenSigned = (await safeWindow?.ethereum?.request({
           method: 'wallet_invokeSnap',
           params: {
             snapId: defaultSnapOrigin,
@@ -159,7 +161,7 @@ export class MetamaskProvider {
         transaction.toPlainObject()
       );
 
-      const metamaskReponse = (await safeWindow.ethereum.request({
+      const metamaskReponse = (await safeWindow?.ethereum?.request({
         method: 'wallet_invokeSnap',
         params: {
           snapId: defaultSnapOrigin,
@@ -184,7 +186,7 @@ export class MetamaskProvider {
     try {
       this.ensureConnected();
 
-      const metamaskReponse = (await safeWindow.ethereum.request({
+      const metamaskReponse = (await safeWindow?.ethereum?.request({
         method: 'wallet_invokeSnap',
         params: {
           snapId: defaultSnapOrigin,
@@ -208,7 +210,8 @@ export class MetamaskProvider {
   }
 
   private ensureConnected() {
-    if (!this.account.address) {
+    const hasMetamask = MetamaskProvider.isMetamaskInstalled();
+    if (!this.account.address || !hasMetamask) {
       throw new ErrAccountNotConnected();
     }
   }
