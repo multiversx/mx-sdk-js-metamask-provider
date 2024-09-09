@@ -6,7 +6,7 @@
   "author": "MultiversX",
   "main": "out/index.js",
   "module": "out/index.js",
-  "types": "out/types/index.d.ts",
+  "types": "out/index.d.ts",
   "directories": {
     "lib": "src"
   },
