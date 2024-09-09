@@ -1,0 +1,27 @@
+{
+    "compilerOptions": {
+        "noImplicitAny": false,
+        "removeComments": true,
+        "noLib": false,
+        "emitDecoratorMetadata": true,
+        "experimentalDecorators": true,
+        "sourceMap": true,
+        "outDir": "./out",
+        "lib": ["dom", "es2015"],
+        "module": "es2015",
+        "moduleResolution": "Node",
+        "target": "es2015",
+        "skipLibCheck": true,
+        "jsx": "react",
+        "allowSyntheticDefaultImports": true,
+        "declarationDir": "./out/types",
+        "declaration": true
+    },
+    "include": [
+        "src/**/*"
+    ],
+    "exclude": [
+        "node_modules",
+        "out"
+    ]
+}
