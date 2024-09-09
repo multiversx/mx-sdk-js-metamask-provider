@@ -14,7 +14,7 @@
         "skipLibCheck": true,
         "jsx": "react",
         "allowSyntheticDefaultImports": true,
-        "declarationDir": "./out/types",
+        "declarationDir": "./out",
         "declaration": true
     },
     "include": [
