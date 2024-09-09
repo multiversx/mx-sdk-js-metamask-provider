@@ -7,7 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-- [Update to yarn, @multiversx/sdk-core as peer depenency](https://github.com/multiversx/mx-sdk-js-metamask-provider/pull/2)
+## [[0.0.6]](https://github.com/multiversx/mx-sdk-js-metamask-provider)] - 2024-09-09
+- [Update to yarn, @multiversx/sdk-core 13.0.0 as peer depenency](https://github.com/multiversx/mx-sdk-js-metamask-provider/pull/2)
 - [Merge development to main](https://github.com/multiversx/mx-sdk-js-metamask-provider/pull/1)
 
 ## [0.0.5] - 2024-08-28
