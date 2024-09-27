@@ -1,11 +1,5 @@
 import { MetaMaskInpageProvider } from '@metamask/providers';
-import {
-  Address,
-  Message,
-  SignableMessage,
-  Transaction
-} from '@multiversx/sdk-core/out';
-import { Signature } from '@multiversx/sdk-core/out/signature';
+import { Address, Message, Transaction } from '@multiversx/sdk-core/out';
 import { defaultSnapOrigin } from './config';
 import { safeWindow } from './constants';
 import {
