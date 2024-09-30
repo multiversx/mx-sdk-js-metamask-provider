@@ -752,10 +752,10 @@
     semver "^7.5.4"
     uuid "^9.0.1"
 
-"@multiversx/sdk-core@>= 13.0.0":
-  version "13.5.0"
-  resolved "https://registry.yarnpkg.com/@multiversx/sdk-core/-/sdk-core-13.5.0.tgz#e3d97fd92e3da534095ead2164a263e8d8a48482"
-  integrity sha512-J20WHxN7muUDrnGRbDhfgGJJEP1f27gdnSNx/7pa5urY/5z5Zh+a9XedUtJ/OXBcSuTp88ZelUpYFNEdenrJXA==
+"@multiversx/sdk-core@>= 13.5.0":
+  version "13.6.3"
+  resolved "https://registry.yarnpkg.com/@multiversx/sdk-core/-/sdk-core-13.6.3.tgz#c88c9a533ba07c22be04ccbd7d605e053cb60e5d"
+  integrity sha512-zMnJShVc3v9+Y4qzKjZ3kpBn7IJHTCOisveMhpdfOJ/CaYgjYKo56vKPMNycBRLIGe5jIY9d/cupzclvmiLjQw==
   dependencies:
     "@multiversx/sdk-transaction-decoder" "1.0.2"
     bech32 "1.1.4"
