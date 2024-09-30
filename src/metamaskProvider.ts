@@ -1,6 +1,5 @@
 import { MetaMaskInpageProvider } from '@metamask/providers';
-import { SignableMessage, Transaction } from '@multiversx/sdk-core/out';
-import { Signature } from '@multiversx/sdk-core/out/signature';
+import { Address, Message, Transaction } from '@multiversx/sdk-core/out';
 import { defaultSnapOrigin } from './config';
 import { safeWindow } from './constants';
 import {
@@ -56,6 +55,14 @@ export class MetamaskProvider {
     return MetamaskProvider._instance;
   }
 
+  getAccount(): IMetamaskWalletAccount | null {
+    return this.account;
+  }
+
+  setAccount(account: IMetamaskWalletAccount): void {
+    this.account = account;
+  }
+
   async init(): Promise<boolean> {
     const hasMetamask = MetamaskProvider.isMetamaskInstalled();
 
@@ -71,12 +78,12 @@ export class MetamaskProvider {
     return this.initialized;
   }
 
-  async login({
-    token
-  }: {
-    callbackUrl?: string;
-    token?: string;
-  } = {}): Promise<string> {
+  async login(
+    options: {
+      token?: string;
+    } = {}
+  ): Promise<IMetamaskWalletAccount> {
+    const token = options.token;
     if (!this.initialized) {
       throw new Error(
         'Metamask provider is not initialised, call init() first' + token
@@ -113,7 +120,7 @@ export class MetamaskProvider {
     } catch (error: any) {
       throw error;
     }
-    return this.account.address;
+    return this.account;
   }
 
   async logout(): Promise<boolean> {
@@ -182,7 +189,7 @@ export class MetamaskProvider {
     }
   }
 
-  async signMessage(message: SignableMessage): Promise<SignableMessage> {
+  async signMessage(messageToSign: Message): Promise<Message> {
     try {
       this.ensureConnected();
 
@@ -192,14 +199,19 @@ export class MetamaskProvider {
           snapId: defaultSnapOrigin,
           request: {
             method: 'mvx_signMessage',
-            params: { message: message.message.toString('ascii') }
+            params: { message: Buffer.from(messageToSign.data).toString() }
           }
         }
       })) as string;
 
-      message.applySignature(new Signature(metamaskReponse));
-
-      return message;
+      return new Message({
+        data: Buffer.from(messageToSign.data),
+        address:
+          messageToSign.address ?? Address.fromBech32(this.account.address),
+        signer: 'metamask',
+        version: messageToSign.version,
+        signature: Buffer.from(metamaskReponse, 'hex')
+      });
     } catch (error) {
       throw error;
     }
