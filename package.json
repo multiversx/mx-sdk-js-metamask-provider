@@ -23,7 +23,7 @@
     "protobufjs": "7.4.0"
   },
   "devDependencies": {
-    "@multiversx/sdk-core": "^15.x",
+    "@multiversx/sdk-core": "^15.0.0",
     "@types/node": "18.19.0",
     "@typescript-eslint/eslint-plugin": "5.0.0",
     "@typescript-eslint/parser": "5.14.0",
@@ -42,6 +42,6 @@
     "typescript": "5.0.4"
   },
   "peerDependencies": {
-    "@multiversx/sdk-core": ">= 14.0.1"
+    "@multiversx/sdk-core": "^14.0.0 || ^15.0.0"
   }
 }
