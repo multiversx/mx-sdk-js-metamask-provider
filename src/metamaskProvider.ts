@@ -180,7 +180,7 @@ export class MetamaskProvider {
       })) as string[];
 
       const transactionsResponse = metamaskReponse.map((transaction: string) =>
-        Transaction.fromPlainObject(JSON.parse(transaction))
+        Transaction.newFromPlainObject(JSON.parse(transaction))
       );
 
       return transactionsResponse;
@@ -207,7 +207,7 @@ export class MetamaskProvider {
       return new Message({
         data: Buffer.from(messageToSign.data),
         address:
-          messageToSign.address ?? Address.fromBech32(this.account.address),
+          messageToSign.address ?? Address.newFromBech32(this.account.address),
         signer: 'metamask',
         version: messageToSign.version,
         signature: Buffer.from(metamaskReponse, 'hex')
