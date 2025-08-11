@@ -7,7 +7,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-## [[3.0.0]](https://github.com/multiversx/mx-sdk-js-metamask-provider/pull/8)] - 2025-08-08
+## [[3.0.0]](https://github.com/multiversx/mx-sdk-js-metamask-provider/pull/8)] - 2025-08-11
 
 ## [[2.0.0]](https://github.com/multiversx/mx-sdk-js-metamask-provider/pull/7)] - 2025-03-26
 
