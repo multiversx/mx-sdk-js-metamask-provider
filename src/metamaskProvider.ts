@@ -5,8 +5,12 @@ import { safeWindow } from './constants';
 import {
   ErrAccountNotConnected,
   ErrCannotSignSingleTransaction,
-  ErrTransactionCancelled
+  ErrProviderNotInitialized,
+  ErrCouldNotLogin,
+  ErrCouldNotSignTransactions,
+  ErrCouldNotSignMessage
 } from './errors';
+import { isMetamaskProvider } from './helpers';
 import { connectSnap, getSnap } from './snap';
 
 export interface IMetamaskWalletAccount {
@@ -29,29 +33,53 @@ declare global {
 export class MetamaskProvider {
   public account: IMetamaskWalletAccount = { address: '' };
   private initialized = false;
-  private static _instance: MetamaskProvider = new MetamaskProvider();
+  private static _instance: MetamaskProvider;
 
   public static isMetamaskInstalled(): boolean {
-    return Boolean(
-      safeWindow && safeWindow.ethereum && safeWindow.ethereum.isMetaMask
-    );
+    return MetamaskProvider.getMetamaskProvider() !== null;
   }
 
-  private constructor() {
-    if (MetamaskProvider._instance) {
-      throw new Error(
-        'Error: Instantiation failed: Use MetamaskProvider.getInstance() instead of new.'
-      );
+  private static getMetamaskProvider(): MetaMaskInpageProvider | null {
+    if (!safeWindow?.ethereum) {
+      return null;
     }
-    MetamaskProvider._instance = this;
+
+    if (safeWindow.ethereum.isMetaMask) {
+      return safeWindow.ethereum;
+    }
+
+    if (safeWindow.ethereum.providers) {
+      const metamaskProvider =
+        safeWindow.ethereum.providers.find(isMetamaskProvider);
+
+      if (metamaskProvider) {
+        return metamaskProvider;
+      }
+    }
+
+    if (safeWindow.ethereum.detected) {
+      const metamaskProvider =
+        safeWindow.ethereum.detected.find(isMetamaskProvider);
+
+      if (metamaskProvider) {
+        return metamaskProvider;
+      }
+    }
+
+    return null;
   }
 
   public static getInstance(): MetamaskProvider {
+    if (!MetamaskProvider._instance) {
+      MetamaskProvider._instance = new MetamaskProvider();
+    }
+
     return MetamaskProvider._instance;
   }
 
   public setAddress(address: string): MetamaskProvider {
     this.account.address = address;
+
     return MetamaskProvider._instance;
   }
 
@@ -72,9 +100,11 @@ export class MetamaskProvider {
         const installedSnap = await getSnap();
         this.initialized = installedSnap !== undefined;
       } catch (error) {
+        console.error('MetamaskProvider init failed:', error);
         this.initialized = false;
       }
     }
+
     return this.initialized;
   }
 
@@ -84,27 +114,36 @@ export class MetamaskProvider {
     } = {}
   ): Promise<IMetamaskWalletAccount> {
     const token = options.token;
+
     if (!this.initialized) {
-      throw new Error(
-        'Metamask provider is not initialised, call init() first' + token
-      );
+      throw new ErrProviderNotInitialized();
     }
+
     try {
-      const address = (await safeWindow?.ethereum?.request({
+      const provider = MetamaskProvider.getMetamaskProvider();
+
+      if (!provider) {
+        throw new ErrCouldNotLogin();
+      }
+
+      const addressResponse = await provider.request({
         method: 'wallet_invokeSnap',
         params: {
           snapId: defaultSnapOrigin,
           request: {
-            method: 'mvx_getAddress',
-            params: undefined
+            method: 'mvx_getAddress'
           }
         }
-      })) as string;
+      });
 
-      this.account.address = address;
+      if (!addressResponse || typeof addressResponse !== 'string') {
+        throw new ErrCouldNotLogin();
+      }
+
+      this.account.address = addressResponse;
 
       if (token) {
-        const tokenSigned = (await safeWindow?.ethereum?.request({
+        const tokenResponse = await provider.request({
           method: 'wallet_invokeSnap',
           params: {
             snapId: defaultSnapOrigin,
@@ -113,21 +152,25 @@ export class MetamaskProvider {
               params: { token: token }
             }
           }
-        })) as string;
+        });
 
-        this.account.signature = tokenSigned;
+        if (!tokenResponse || typeof tokenResponse !== 'string') {
+          throw new ErrCouldNotLogin();
+        }
+
+        this.account.signature = tokenResponse;
       }
     } catch (error: any) {
-      throw error;
+      console.error('MetamaskProvider login failed:', error);
+      throw new ErrCouldNotLogin();
     }
+
     return this.account;
   }
 
   async logout(): Promise<boolean> {
     if (!this.initialized) {
-      throw new Error(
-        'Metamask provider is not initialised, call init() first'
-      );
+      throw new ErrProviderNotInitialized();
     }
 
     this.account = { address: '' };
@@ -137,11 +180,10 @@ export class MetamaskProvider {
 
   async getAddress(): Promise<string> {
     if (!this.initialized) {
-      throw new Error(
-        'Metamask provider is not initialised, call init() first'
-      );
+      throw new ErrProviderNotInitialized();
     }
-    return this.account ? this.account.address : '';
+
+    return this.account?.address ?? '';
   }
 
   isInitialized(): boolean {
@@ -164,11 +206,18 @@ export class MetamaskProvider {
 
   async signTransactions(transactions: Transaction[]): Promise<Transaction[]> {
     try {
+      this.ensureConnected();
+      const provider = MetamaskProvider.getMetamaskProvider();
+
+      if (!provider) {
+        throw new ErrCouldNotSignTransactions();
+      }
+
       const transactionsPlain = transactions.map((transaction) =>
         transaction.toPlainObject()
       );
 
-      const metamaskReponse = (await safeWindow?.ethereum?.request({
+      const signResponse = await provider.request({
         method: 'wallet_invokeSnap',
         params: {
           snapId: defaultSnapOrigin,
@@ -177,23 +226,33 @@ export class MetamaskProvider {
             params: { transactions: transactionsPlain }
           }
         }
-      })) as string[];
+      });
 
-      const transactionsResponse = metamaskReponse.map((transaction: string) =>
+      if (!Array.isArray(signResponse)) {
+        throw new ErrCouldNotSignTransactions();
+      }
+
+      const transactionsResponse = signResponse.map((transaction: string) =>
         Transaction.newFromPlainObject(JSON.parse(transaction))
       );
 
       return transactionsResponse;
     } catch (error) {
-      throw new ErrTransactionCancelled();
+      console.error('MetamaskProvider signTransactions failed:', error);
+      throw new ErrCouldNotSignTransactions();
     }
   }
 
   async signMessage(messageToSign: Message): Promise<Message> {
     try {
       this.ensureConnected();
+      const provider = MetamaskProvider.getMetamaskProvider();
 
-      const metamaskReponse = (await safeWindow?.ethereum?.request({
+      if (!provider) {
+        throw new ErrCouldNotSignMessage();
+      }
+
+      const signResponse = await provider.request({
         method: 'wallet_invokeSnap',
         params: {
           snapId: defaultSnapOrigin,
@@ -202,7 +261,11 @@ export class MetamaskProvider {
             params: { message: Buffer.from(messageToSign.data).toString() }
           }
         }
-      })) as string;
+      });
+
+      if (!signResponse || typeof signResponse !== 'string') {
+        throw new ErrCouldNotSignMessage();
+      }
 
       return new Message({
         data: Buffer.from(messageToSign.data),
@@ -210,10 +273,11 @@ export class MetamaskProvider {
           messageToSign.address ?? Address.newFromBech32(this.account.address),
         signer: 'metamask',
         version: messageToSign.version,
-        signature: Buffer.from(metamaskReponse, 'hex')
+        signature: Buffer.from(signResponse, 'hex')
       });
     } catch (error) {
-      throw error;
+      console.error('MetamaskProvider signMessage failed:', error);
+      throw new ErrCouldNotSignMessage();
     }
   }
 
@@ -223,6 +287,7 @@ export class MetamaskProvider {
 
   private ensureConnected() {
     const hasMetamask = MetamaskProvider.isMetamaskInstalled();
+
     if (!this.account.address || !hasMetamask) {
       throw new ErrAccountNotConnected();
     }
