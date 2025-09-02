@@ -7,7 +7,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-## [[3.0.1]](https://github.com/multiversx/mx-sdk-js-metamask-provider/pull/10)] - 2025-09-02
+## [[3.0.2]](https://github.com/multiversx/mx-sdk-js-metamask-provider/pull/10)] - 2025-09-02
 - [Refactor MetamaskProvider to improve error handling and provider detection](https://github.com/multiversx/mx-sdk-js-metamask-provider/pull/10)
 
 ## [[3.0.0]](https://github.com/multiversx/mx-sdk-js-metamask-provider/pull/8)] - 2025-08-11
