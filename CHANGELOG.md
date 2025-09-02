@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+- [Fixed invalid params passed to invoked getAddress method](https://github.com/multiversx/mx-sdk-js-metamask-provider/pull/11)
+
 ## [[2.0.0]](https://github.com/multiversx/mx-sdk-js-metamask-provider/pull/7)] - 2025-03-26
 - [Upgrade sdk-core to v14](https://github.com/multiversx/mx-sdk-js-metamask-provider/pull/6)
 
