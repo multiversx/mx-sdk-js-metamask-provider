@@ -10,7 +10,6 @@ import {
   ErrCouldNotSignTransactions,
   ErrCouldNotSignMessage
 } from './errors';
-import { isMetamaskProvider } from './helpers';
 import { connectSnap, getSnap } from './snap';
 
 export interface IMetamaskWalletAccount {
@@ -40,29 +39,25 @@ export class MetamaskProvider {
   }
 
   private static getMetamaskProvider(): MetaMaskInpageProvider | null {
-    if (!safeWindow?.ethereum) {
+    const eth = safeWindow?.ethereum;
+
+    if (!eth) {
       return null;
     }
 
-    if (safeWindow.ethereum.isMetaMask) {
-      return safeWindow.ethereum;
+    if (eth.isMetaMask && typeof eth.request === 'function') {
+      return eth;
     }
 
-    if (safeWindow.ethereum.providers) {
-      const metamaskProvider =
-        safeWindow.ethereum.providers.find(isMetamaskProvider);
+    const providers = eth.providers ?? eth.detected ?? [];
 
-      if (metamaskProvider) {
-        return metamaskProvider;
-      }
-    }
+    for (const provider of providers) {
+      if (provider.isMetaMask && typeof provider.request === 'function') {
+        if (typeof eth.setProvider === 'function') {
+          eth.setProvider(provider);
+        }
 
-    if (safeWindow.ethereum.detected) {
-      const metamaskProvider =
-        safeWindow.ethereum.detected.find(isMetamaskProvider);
-
-      if (metamaskProvider) {
-        return metamaskProvider;
+        return provider;
       }
     }
 
