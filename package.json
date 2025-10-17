@@ -1,6 +1,6 @@
 {
   "name": "@multiversx/sdk-metamask-provider",
-  "version": "3.0.2",
+  "version": "3.0.3",
   "description": "Signing provider for dApps: Metamask Snap",
   "license": "GPL-3.0-or-later",
   "author": "MultiversX",

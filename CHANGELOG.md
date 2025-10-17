@@ -7,24 +7,29 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-## [[3.0.2]](https://github.com/multiversx/mx-sdk-js-metamask-provider/pull/10)] - 2025-09-02
+## [[3.0.3]](https://github.com/multiversx/mx-sdk-js-metamask-provider/pull/13) - 2025-10-17
+
+- [Update snap to 2.0.0](https://github.com/multiversx/mx-sdk-js-metamask-provider/pull/12)
+
+## [[3.0.2]](https://github.com/multiversx/mx-sdk-js-metamask-provider/pull/10) - 2025-09-02
+
 - [Refactor MetamaskProvider to improve error handling and provider detection](https://github.com/multiversx/mx-sdk-js-metamask-provider/pull/10)
 
-## [[3.0.0]](https://github.com/multiversx/mx-sdk-js-metamask-provider/pull/8)] - 2025-08-11
+## [[3.0.0]](https://github.com/multiversx/mx-sdk-js-metamask-provider/pull/8) - 2025-08-11
 
-## [[2.0.0]](https://github.com/multiversx/mx-sdk-js-metamask-provider/pull/7)] - 2025-03-26
+## [[2.0.0]](https://github.com/multiversx/mx-sdk-js-metamask-provider/pull/7) - 2025-03-26
 
 - [Upgrade sdk-core to v14](https://github.com/multiversx/mx-sdk-js-metamask-provider/pull/6)
 
-## [[1.0.0]](https://github.com/multiversx/mx-sdk-js-metamask-provider/pull/5)] - 2024-09-30
+## [[1.0.0]](https://github.com/multiversx/mx-sdk-js-metamask-provider/pull/5) - 2024-09-30
 
 - [Standardize provider](https://github.com/multiversx/mx-sdk-js-metamask-provider/pull/5)
 
-## [[0.0.7]](https://github.com/multiversx/mx-sdk-js-metamask-provider/pull/4)] - 2024-09-09
+## [[0.0.7]](https://github.com/multiversx/mx-sdk-js-metamask-provider/pull/4) - 2024-09-09
 
 - [Updated types export to out folder](https://github.com/multiversx/mx-sdk-js-metamask-provider/pull/3)
 
-## [[0.0.6]](https://github.com/multiversx/mx-sdk-js-metamask-provider/pull/1)] - 2024-09-09
+## [[0.0.6]](https://github.com/multiversx/mx-sdk-js-metamask-provider/pull/1) - 2024-09-09
 
 - [Update to yarn, @multiversx/sdk-core 13.0.0 as peer depenency](https://github.com/multiversx/mx-sdk-js-metamask-provider/pull/2)
 - [Merge development to main](https://github.com/multiversx/mx-sdk-js-metamask-provider/pull/1)
