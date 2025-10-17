@@ -91,7 +91,7 @@ export class MetamaskProvider {
 
     if (hasMetamask && !this.initialized) {
       try {
-        await connectSnap();
+        await connectSnap(defaultSnapOrigin, { version: '2.0.0' });
         const installedSnap = await getSnap();
         this.initialized = installedSnap !== undefined;
       } catch (error) {
